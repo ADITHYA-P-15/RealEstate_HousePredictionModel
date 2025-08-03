@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengaluru Real Estate Price Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .form-radio-label {
+            display: block;
+            cursor: pointer;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            background-color: #f9fafb;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-radio-label:hover {
+            border-color: #14b8a6;
+            color: #14b8a6;
+        }
+        input[type="radio"]:checked + .form-radio-label {
+            background-color: #14b8a6;
+            color: white;
+            border-color: #14b8a6;
+            box-shadow: 0 4px 14px 0 rgba(20, 184, 166, 0.3);
+        }
+        input[type="radio"] {
+            display: none;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #14b8a6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-cyan-500 to-blue-600 min-h-screen flex items-center justify-center p-4 lg:p-8">
+
+    <main class="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left Column: Form -->
+        <div class="glass-card rounded-2xl shadow-2xl p-8">
+            <h1 class="text-3xl font-bold text-gray-800">Price Predictor</h1>
+            <p class="text-gray-600 mt-2 mb-6">Fill in the property details to get an estimate.</p>
+
+            <form id="prediction-form" class="space-y-6">
+                <!-- Area Input -->
+                <div>
+                    <label for="area" class="text-lg font-medium text-gray-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" /></svg>
+                        Area (in Sq. Ft.)
+                    </label>
+                    <input type="number" id="area" name="area" class="w-full mt-2 p-3 bg-white border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-teal-500 transition" placeholder="e.g., 1200" required>
+                </div>
+
+                <!-- BHK Selection -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                        BHK (Bedrooms)
+                    </h3>
+                    <div class="grid grid-cols-5 gap-2 mt-2">
+                        <div><input type="radio" id="bhk1" name="bhk" value="1" required><label for="bhk1" class="form-radio-label">1</label></div>
+                        <div><input type="radio" id="bhk2" name="bhk" value="2"><label for="bhk2" class="form-radio-label">2</label></div>
+                        <div><input type="radio" id="bhk3" name="bhk" value="3"><label for="bhk3" class="form-radio-label">3</label></div>
+                        <div><input type="radio" id="bhk4" name="bhk" value="4"><label for="bhk4" class="form-radio-label">4</label></div>
+                        <div><input type="radio" id="bhk5" name="bhk" value="5"><label for="bhk5" class="form-radio-label">5</label></div>
+                    </div>
+                </div>
+
+                <!-- Bathroom Selection -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-700 flex items-center">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        Bathrooms
+                    </h3>
+                    <div class="grid grid-cols-5 gap-2 mt-2">
+                        <div><input type="radio" id="bath1" name="bath" value="1" required><label for="bath1" class="form-radio-label">1</label></div>
+                        <div><input type="radio" id="bath2" name="bath" value="2"><label for="bath2" class="form-radio-label">2</label></div>
+                        <div><input type="radio" id="bath3" name="bath" value="3"><label for="bath3" class="form-radio-label">3</label></div>
+                        <div><input type="radio" id="bath4" name="bath" value="4"><label for="bath4" class="form-radio-label">4</label></div>
+                        <div><input type="radio" id="bath5" name="bath" value="5"><label for="bath5" class="form-radio-label">5</label></div>
+                    </div>
+                </div>
+
+                <!-- Location Selection -->
+                <div>
+                    <label for="location" class="text-lg font-medium text-gray-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657l-4.243 4.243a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        Location
+                    </label>
+                    <select id="location" name="location" class="w-full mt-2 p-3 bg-white border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-teal-500 transition" required>
+                        <option value="" disabled selected>Select a Location</option>
+                    </select>
+                </div>
+
+                <!-- Predict Button -->
+                <button type="submit" class="w-full bg-teal-500 text-white text-xl font-semibold p-4 rounded-lg shadow-lg hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-transform transform hover:scale-105">
+                    Predict Price
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Column: Result & Featured -->
+        <div class="space-y-8">
+            <!-- Result Display -->
+            <div id="result-container" class="glass-card rounded-2xl shadow-2xl p-8 text-center transition-all duration-500 h-40 flex flex-col justify-center items-center">
+                <h2 class="text-2xl font-bold text-gray-700">Estimated Price</h2>
+                <div id="result-content">
+                     <p id="result" class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-blue-600 mt-2">₹ -- Lakhs</p>
+                </div>
+            </div>
+            
+            <!-- Featured Properties -->
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold text-white text-center">Featured Properties</h2>
+                <div id="featured-properties" class="space-y-4">
+                    <!-- Property Card 1 -->
+                    <div class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:shadow-lg transition-shadow">
+                        <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=200&auto=format&fit=crop" alt="Luxury Villa" class="w-24 h-24 rounded-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/100x100/14b8a6/ffffff?text=Villa';">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-lg text-gray-800">Luxury Villa in Whitefield</h3>
+                            <p class="text-sm text-gray-600">2400 sqft, 4 BHK, 4 Bath</p>
+                        </div>
+                        <button class="predict-featured bg-green-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-600 transition" data-area="2400" data-bhk="4" data-bath="4" data-location="whitefield">Predict</button>
+                    </div>
+                    <!-- Property Card 2 -->
+                    <div class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:shadow-lg transition-shadow">
+                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=200&auto=format&fit=crop" alt="Modern Apartment" class="w-24 h-24 rounded-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/100x100/22c55e/ffffff?text=Apt';">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-lg text-gray-800">Modern Apt in Indira Nagar</h3>
+                            <p class="text-sm text-gray-600">1250 sqft, 2 BHK, 2 Bath</p>
+                        </div>
+                        <button class="predict-featured bg-green-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-600 transition" data-area="1250" data-bhk="2" data-bath="2" data-location="indira nagar">Predict</button>
+                    </div>
+                    <!-- Property Card 3 -->
+                    <div class="glass-card rounded-2xl p-4 flex items-center gap-4 hover:shadow-lg transition-shadow">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=200&auto=format&fit=crop" alt="Suburban House" class="w-24 h-24 rounded-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/100x100/3b82f6/ffffff?text=House';">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-lg text-gray-800">Suburban House in Jayanagar</h3>
+                            <p class="text-sm text-gray-600">1500 sqft, 3 BHK, 3 Bath</p>
+                        </div>
+                        <button class="predict-featured bg-green-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-600 transition" data-area="1500" data-bhk="3" data-bath="3" data-location="1st block jayanagar">Predict</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const serverUrl = "http://127.0.0.1:5000"; // URL of your Flask server
+
+        // Populate the location dropdown by fetching from the server
+        async function setupLocations() {
+            try {
+                const response = await fetch(`${serverUrl}/get_location_names`);
+                const data = await response.json();
+                if (data.locations) {
+                    const locationSelect = document.getElementById('location');
+                    data.locations.forEach(location => {
+                        const option = document.createElement('option');
+                        option.value = location;
+                        option.textContent = location.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                        locationSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching locations:", error);
+                document.getElementById('result').textContent = `Server connection error.`;
+            }
+        }
+
+        // Get prediction from the server
+        async function predictPrice(location, sqft, bath, bhk) {
+            const resultContainer = document.getElementById('result-content');
+            resultContainer.innerHTML = '<div class="loader"></div>'; // Show loader
+
+            try {
+                const response = await fetch(`${serverUrl}/predict_home_price`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        location: location,
+                        total_sqft: sqft,
+                        bath: bath,
+                        bhk: bhk
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                resultContainer.innerHTML = `<p id="result" class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-blue-600 mt-2">₹ ${data.estimated_price} Lakhs</p>`;
+
+            } catch (error) {
+                console.error("Error predicting price:", error);
+                resultContainer.innerHTML = `<p id="result" class="text-2xl font-bold text-red-500 mt-2">Prediction Failed</p>`;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('prediction-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const area = parseFloat(document.getElementById('area').value);
+            const bhkRadio = document.querySelector('input[name="bhk"]:checked');
+            const bathRadio = document.querySelector('input[name="bath"]:checked');
+            const location = document.getElementById('location').value;
+            
+            if (!area || !bhkRadio || !bathRadio || !location) {
+                document.getElementById('result').textContent = `Please fill all fields.`;
+                return;
+            }
+            
+            predictPrice(location, area, parseInt(bathRadio.value), parseInt(bhkRadio.value));
+        });
+        
+        // Handle clicks on featured properties
+        document.querySelectorAll('.predict-featured').forEach(button => {
+            button.addEventListener('click', function() {
+                const area = this.dataset.area;
+                const bhk = this.dataset.bhk;
+                const bath = this.dataset.bath;
+                const location = this.dataset.location;
+
+                document.getElementById('area').value = area;
+                document.getElementById(`bhk${bhk}`).checked = true;
+                document.getElementById(`bath${bath}`).checked = true;
+                document.getElementById('location').value = location;
+                
+                predictPrice(location, parseFloat(area), parseInt(bath), parseInt(bhk));
+            });
+        });
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', setupLocations);
+    </script>
+</body>
+</html>

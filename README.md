@@ -34,4 +34,8 @@ This project combines data-driven modeling with an interactive web interface to 
 
 Adithya Prasad
 
+## Credit:
+CodeBasics Youtube Channel
+
+
 

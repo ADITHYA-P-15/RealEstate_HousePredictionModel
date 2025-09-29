@@ -33,6 +33,10 @@ This project combines data-driven modeling with an interactive web interface to 
 ## Author:
 
 Adithya Prasad
+B.Tech
+Computer and Communication Engineering
+MIT Manipal
+
 
 ## Credit:
 CodeBasics Youtube Channel
